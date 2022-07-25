@@ -6,7 +6,7 @@ variable "release_name" {
 variable "namespace" {
   description = "Namespace to install InfluxDB chart into"
   type        = string
-  default     = "influxdb"
+  default     = "devsecops"
 }
 
 variable "influxdb_chart_version" {
@@ -22,21 +22,23 @@ variable "timeout_seconds" {
   default     = 800 # 10 minutes
 }
 
-variable "admin_password" {
-  description = "Default Admin Password"
-  type        = string
-  default     = ""
-  validation {
-    condition     = var.admin_password != "" ? length(var.admin_password) >= 8 : true
-    error_message = "Admin password must be at least 8 characters in length."
-  }
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
-variable "admin_token" {
-  description = "Default Admin Token"
-  type        = string
-  default     = ""
+#admin_password     = random_password.password.result
+
+
+resource "random_string" "random" {
+  length           = 16
+  special          = true
+  override_special = "/@£$"
 }
+
+#admin_token = random_string.random.result
+
 
 variable "values_file" {
   description = "The name of the InfluxDB helm chart values file to use"
@@ -46,8 +48,8 @@ variable "values_file" {
 
 variable "enable_persistence" {
   description = "Persist data to a persistent volume?"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "pv_size" {

@@ -16,16 +16,16 @@ resource "helm_release" "influxdb2" {
 
   set_sensitive {
     name  = "adminUser.password"
-    value = var.admin_password
+    value = random_password.password.result
   }
 
   set_sensitive {
     name  = "adminUser.token"
-    value = var.admin_token
+    value = random_string.random.result
   }
 
   set {
-    name = "persistence.enabled"
+    name  = "persistence.enabled"
     value = var.enable_persistence
   }
 
