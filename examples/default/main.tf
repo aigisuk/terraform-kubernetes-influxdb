@@ -6,7 +6,6 @@ terraform {
     }
   }
 }
-
 provider "helm" {
   kubernetes {
     config_path = "~/.kube/config" # path to your kubeconfig file
